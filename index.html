@@ -2001,14 +2001,42 @@ function calcOSAGO() {
 }
 
 /* ===== ОБНОВЛЕННАЯ ИНИЦИАЛИЗАЦИЯ ===== */
+/* ===== ОБНОВЛЕННАЯ ИНИЦИАЛИЗАЦИЯ ===== */
 document.addEventListener('DOMContentLoaded', () => {
   const birthInput = document.getElementById('birthDate');
   const expInput = document.getElementById('experienceDate');
+  const vehicleSelect = document.getElementById('vehicle');
+  const regionSelect = document.getElementById('region');
+  const citySelect = document.getElementById('city');
 
   if (birthInput) applyDateMask(birthInput);
   if (expInput) applyDateMask(expInput);
 
-  // Следим за всеми полями
+  // 1. ЗАГРУЗКА ИЗ ПАМЯТИ ПРИ СТАРТЕ
+  const savedVehicle = localStorage.getItem('vehicle');
+  const savedRegion = localStorage.getItem('region');
+  const savedCity = localStorage.getItem('city');
+
+  if (savedVehicle) vehicleSelect.value = savedVehicle;
+  
+  if (savedRegion) {
+    regionSelect.value = savedRegion;
+    // Наполняем список городов для сохраненного региона
+    updateKT(); 
+    
+    // Если город тоже был сохранен, выбираем его
+    if (savedCity) {
+      // Небольшая задержка, чтобы список городов успел прогрузиться в DOM
+      citySelect.value = savedCity;
+      // Обновляем текущий KT из значения выбранного города
+      currentKT = parseFloat(citySelect.value) || 1;
+    }
+  } else {
+    // Если памяти нет, просто запускаем стандартное наполнение
+    updateKT();
+  }
+
+  // 2. СЛЕДИМ ЗА ВСЕМИ ПОЛЯМИ
   const ids = [
     'vehicle', 'region', 'city', 'noLimits', 'kbm', 
     'birthDate', 'experienceDate', 'ks',
@@ -2020,17 +2048,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (el) {
       const eventType = (id === 'birthDate' || id === 'experienceDate') ? 'input' : 'change';
 
-	el.addEventListener(eventType, () => {
-  // Если изменили категорию ТС — нужно обновить доступные города и их КТ
-	if (id === 'vehicle' || id === 'region') {
-      updateKT();
-	}
-  
-	if (id === 'city') {
-      currentKT = parseFloat(el.value);
-	}
-  calcOSAGO();
-});
+      el.addEventListener(eventType, () => {
+        // Сохраняем выбор в память
+        if (id === 'region' || id === 'city' || id === 'vehicle') {
+          localStorage.setItem(id, el.value);
+        }
+
+        if (id === 'vehicle' || id === 'region') {
+          updateKT();
+        }
+        
+        if (id === 'city') {
+          currentKT = parseFloat(el.value);
+        }
+        calcOSAGO();
+      });
     }
   });
 
@@ -2039,10 +2071,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-
-
-
 </body>
 </html>
-
 
