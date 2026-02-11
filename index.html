@@ -1,13 +1,5 @@
 <!DOCTYPE html>
 <html lang="ru">
-	<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ABC123XYZ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-JWF3J0HKVM');
-</script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -188,6 +180,24 @@
   <option value="1.6">Свыше 150</option>
 </select>
 </label>
+</div>
+
+<!-- Конвертер КВТ-ЛС -->
+<div id="powerConverter" style="display:none; margin-top: 15px; padding: 15px; background: #334155; border-radius: 12px; border: 1px solid #475569;">
+    <h3 style="margin-top:0; font-size: 13px; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.5px;">Конвертер мощности</h3>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div>
+            <label style="margin-top:0; font-size: 10px;">Киловатты (кВт)</label>
+            <input type="number" id="inputKW" placeholder="кВт" step="any" style="margin-top:5px;">
+        </div>
+        <div>
+            <label style="margin-top:0; font-size: 10px;">Лошадиные силы (л.с.)</label>
+            <input type="number" id="inputHP" placeholder="л.с." step="any" style="margin-top:5px;">
+        </div>
+    </div>
+    <div style="margin-top: 10px; font-size: 11px; color: #94a3b8; text-align: center;">
+        1 кВт ≈ 1.35962 л.с.
+    </div>
 </div>
 
 <label>
@@ -1991,9 +2001,11 @@ function calcOSAGO() {
   let km = 1;
   const pMotoBlock = document.getElementById('powerMoto');
   const pAutoBlock = document.getElementById('powerAuto');
+  const pConverter = document.getElementById('powerConverter');
 
   if (pMotoBlock) pMotoBlock.style.display = isMoto ? 'block' : 'none';
   if (pAutoBlock) pAutoBlock.style.display = isAuto ? 'block' : 'none';
+  if (pConverter) pConverter.style.display = (isMoto || isAuto) ? 'block' : 'none';
 
   if (isMoto) {
     const pVal = document.getElementById('powerMotoValue');
@@ -2094,12 +2106,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updateKT();
   calcOSAGO();
+  
+  // Логика работы конвертера кВт <-> л.с.
+const inputKW = document.getElementById('inputKW');
+const inputHP = document.getElementById('inputHP');
+const RATIO = 1.35962;
+
+if (inputKW && inputHP) {
+    inputKW.addEventListener('input', function() {
+        const val = parseFloat(this.value);
+        if (!isNaN(val)) {
+            inputHP.value = (val * RATIO).toFixed(2);
+        } else {
+            inputHP.value = '';
+        }
+    });
+
+    inputHP.addEventListener('input', function() {
+        const val = parseFloat(this.value);
+        if (!isNaN(val)) {
+            inputKW.value = (val / RATIO).toFixed(2);
+        } else {
+            inputKW.value = '';
+        }
+    });
+}
 });
 </script>
 
+
+
+
 </body>
 </html>
-
-
-
 
