@@ -3,14 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Калькулятор ОСАГО 2026</title>
+    <title>Универсальный калькулятор ОСАГО</title>
     <style>
+        /* Общие стили для обоих калькуляторов */
         body {
             background: #0f172a;
             color: #f1f5f9;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             margin: 0;
             padding: 15px;
+        }
+
+        /* Навигация (Вкладки) */
+        .tabs-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            max-width: 1100px;
+            margin: 0 auto 20px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: #1e293b;
+            color: #94a3b8;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+
+        .tab-btn.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
+        }
+
+        .calc-content {
+            display: none;
+        }
+
+        .calc-content.active {
+            display: block;
         }
 
         .main-container {
@@ -25,7 +63,7 @@
             .main-container { grid-template-columns: 1fr; }
         }
 
-        /* Левая часть - Ввод */
+        /* Общие стили блоков */
         .input-section {
             background: #1e293b;
             padding: 24px;
@@ -33,10 +71,20 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
+        .result-section {
+            background: #1e293b;
+            padding: 24px;
+            border-radius: 16px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+            border: 2px solid #334155;
+        }
+
         label {
             display: block;
             margin-top: 15px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             color: #94a3b8;
             text-transform: uppercase;
@@ -50,32 +98,18 @@
             border: 1px solid #334155;
             background: #0f172a;
             color: #fff;
-            font-size: 16px;
+            font-size: 15px;
             box-sizing: border-box;
         }
 
-        .kvs-section {
+        h2, h3 { margin: 0; color: #fbbf24; }
+        h3 { font-size: 14px; text-transform: uppercase; margin-bottom: 10px; }
+
+        .coeff-group, .kvs-section {
             background: #334155;
             padding: 15px;
             border-radius: 12px;
             margin-top: 20px;
-        }
-
-        .kvs-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        /* Правая часть - Результат */
-        .result-section {
-            background: #1e293b;
-            padding: 24px;
-            border-radius: 16px;
-            height: fit-content;
-            position: sticky;
-            top: 20px;
-            border: 2px solid #334155;
         }
 
         .result-total {
@@ -88,37 +122,151 @@
             padding-bottom: 15px;
         }
 
-        .coeff-table {
+        .info-table, .coeff-table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .coeff-table td {
+        .info-table td, .coeff-table td {
             padding: 12px 0;
             font-size: 14px;
             border-bottom: 1px solid #334155;
         }
 
-        .coeff-name { color: #94a3b8; }
-        .coeff-value { text-align: right; font-weight: 700; color: #f8fafc; }
+        .name-cell { color: #94a3b8; }
+        .val-cell { text-align: right; font-weight: 700; color: #f8fafc; }
 
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            text-transform: none;
-            color: #f1f5f9;
-        }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+        .date-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+		
+		
+		/* Стили для сетки КВС */
+.kvs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 10px;
+}
 
-        input[type="checkbox"] { width: auto; }
+.kvs-grid div {
+    display: flex;
+    flex-direction: column;
+}
+
+.kvs-grid label {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+		
+		/* Стиль для основной кнопки расчета */
+#addendum-content button {
+    width: 100%;
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+#addendum-content button:hover {
+    background: #1d4ed8;
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
+}
+
+#addendum-content button:active {
+    transform: scale(0.98);
+}
+
+/* Контейнер для строки с тумблером */
+.toggle-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #334155;
+    padding: 15px 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.toggle-label-text {
+    font-size: 14px;
+    font-weight: 700;
+    color: #f1f5f9;
+}
+
+/* Сам тумблер (Switch) */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #0f172a;
+    transition: .4s;
+    border-radius: 34px;
+    border: 1px solid #475569;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2563eb;
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+/* Анимация скрытия секций */
+.hidden-section {
+    display: block;
+    transition: opacity 0.3s ease;
+}
+
+.hidden {
+    display: none !important;
+}
+
     </style>
 </head>
-
 <body>
 
-<div class="main-container">
-    <div class="input-section">
+    <div class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab('osago')">Калькулятор ОСАГО</button>
+        <button class="tab-btn" onclick="switchTab('addendum')">Калькулятор Аддендума</button>
+    </div>
+
+    <div id="osago-content" class="calc-content active">
+        <div class="main-container">
+            <div class="input-section">
         <h2 style="margin-top:0; color:#fbbf24;">Калькулятор ОСАГО 2026</h2>
         
         <label>Категория ТС</label>
@@ -299,21 +447,24 @@
   <select id="city"></select>
 </div>
 
-<label style="margin-top:18px;">
-  <input type="checkbox" id="noLimits">
-  Без ограничений
-</label>
+<div class="toggle-wrapper">
+    <span class="toggle-label-text">БЕЗ ОГРАНИЧЕНИЙ (КО)</span>
+    <label class="switch">
+        <input type="checkbox" id="noLimits">
+        <span class="slider"></span>
+    </label>
+</div>
 
-
-
+<div id="section-kbm-container" class="hidden-section">
 <label>
 КБМ
+</label>
 <select id="kbm">
   <option value="3.92">М&nbsp;&nbsp;&nbsp;(КБМ = 3,92)</option>
   <option value="2.94">0&nbsp;&nbsp;&nbsp;(КБМ = 2,94)</option>
   <option value="2.25">1&nbsp;&nbsp;&nbsp;(КБМ = 2,25)</option>
   <option value="1.76">2&nbsp;&nbsp;&nbsp;(КБМ = 1,76)</option>
-  <option value="1.17"selected >3&nbsp;&nbsp;&nbsp;(КБМ = 1,17)</option>
+  <option value="1.17" selected>3&nbsp;&nbsp;&nbsp;(КБМ = 1,17)</option>
   <option value="1">4&nbsp;&nbsp;&nbsp;(КБМ = 1)</option>
   <option value="0.91">5&nbsp;&nbsp;&nbsp;(КБМ = 0,91)</option>
   <option value="0.83">6&nbsp;&nbsp;&nbsp;(КБМ = 0,83)</option>
@@ -325,10 +476,9 @@
   <option value="0.52">12&nbsp;&nbsp;(КБМ = 0,52)</option>
   <option value="0.46">13&nbsp;&nbsp;(КБМ = 0,46)</option>
 </select>
-</label>
+</div>
 
-
-<div class="kvs-section">
+<div id="section-kvs-container" class="kvs-section hidden-section">
   <h3>Расчет КВС</h3>
   <div class="kvs-grid">
     <div>
@@ -372,9 +522,131 @@
     </div>
 </div>
 
+<!-- Авторство -->
+<div style="
+  max-width:1100px;
+  margin:30px auto 10px;
+  text-align:center;
+  font-size:12px;
+  color:#94a3b8;
+">
+  Калькулятор ОСАГО 2026 · версия 1.0<br>
+  Автор: KPI Master ·
+  <a href="https://t.me/KPImaster" target="_blank" style="color:#38bdf8; text-decoration:none;">
+    Telegram
+  </a>
+</div>
+</div>
 
-<div class="result" id="result"></div>
-<div class="details" id="details"></div>
+    <div id="addendum-content" class="calc-content">
+        <div class="main-container">
+            <div class="input-section">
+        <h2 style="margin-top:0; color:#fbbf24;">Калькулятор Аддендума ОСАГО</h2>
+        
+        <div class="date-group">
+            <div>
+    <label>Дата начала</label>
+    <input id="dateStart" class="date-input" type="text" maxlength="10" placeholder="ДД.ММ.ГГГГ">
+</div>
+<div>
+    <label>Дата окончания</label>
+    <input id="dateEnd" class="date-input" type="text" maxlength="10" placeholder="ДД.ММ.ГГГГ">
+</div>
+        </div>
+
+        <div class="grid-3" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+                <label>Старый БТ</label>
+                <input id="btOld" type="number" value="7535" step="0.01">
+            </div>
+            <div>
+                <label>Новый БТ</label>
+                <input id="btNew" type="number" value="8665" step="0.01">
+            </div>
+        </div>
+
+        <div class="coeff-group">
+            <h3>📊 СТАРЫЕ КОЭФФИЦИЕНТЫ</h3>
+            <div class="grid-3">
+                <div><label>КТ</label><input id="ktOld" value="1"></div>
+                <div><label>КБМ</label><select id="kbmOld">
+  <option value="3.92">3.92</option>
+  <option value="2.94">2.94</option>
+  <option value="2.25">2.25</option>
+  <option value="1.76">1.76</option>
+  <option value="1.17">1.17</option>
+  <option value="1"selected >1</option>
+  <option value="0.91">0.91</option>
+  <option value="0.83">0.83</option>
+  <option value="0.78">0.78</option>
+  <option value="0.74">0.74</option>
+  <option value="0.68">0.68</option>
+  <option value="0.63">0.63</option>
+  <option value="0.57">0.57</option>
+  <option value="0.52">0.52</option>
+  <option value="0.46">0.46</option>
+</select></div>
+                <div><label>КВС</label><input id="kvsOld" value="1"></div>
+                <div><label>КО</label><input id="koOld" value="1"></div>
+                <div><label>КМ</label><input id="kmOld" value="1"></div>
+                <div><label>КС</label><input id="ksOld" value="1"></div>
+            </div>
+        </div>
+
+        <div class="coeff-group">
+            <h3>📈 НОВЫЕ КОЭФФИЦИЕНТЫ</h3>
+            <div class="grid-3">
+                <div><label>КТ</label><input id="ktNew" value="1"></div>
+                <div><label>КБМ</label><select id="kbmNew">
+  <option value="3.92">3.92</option>
+  <option value="2.94">2.94</option>
+  <option value="2.25">2.25</option>
+  <option value="1.76">1.76</option>
+  <option value="1.17">1.17</option>
+  <option value="1"selected >1</option>
+  <option value="0.91">0.91</option>
+  <option value="0.83">0.83</option>
+  <option value="0.78">0.78</option>
+  <option value="0.74">0.74</option>
+  <option value="0.68">0.68</option>
+  <option value="0.63">0.63</option>
+  <option value="0.57">0.57</option>
+  <option value="0.52">0.52</option>
+  <option value="0.46">0.46</option>
+</select></div>
+                <div><label>КВС</label><input id="kvsNew" value="1"></div>
+                <div><label>КО</label><input id="koNew" value="1"></div>
+                <div><label>КМ</label><input id="kmNew" value="1"></div>
+                <div><label>КС</label><input id="ksNew" value="1"></div>
+            </div>
+        </div>
+
+        <button onclick="calculate()">Рассчитать доплату</button>
+    </div>
+
+    <div class="result-section">
+        <div class="result-label" style="text-align:center; color:#94a3b8; font-size:14px;">Сумма доплаты:</div>
+        <div class="result-total" id="result-due">0.00 ₽</div>
+        
+        <table class="info-table">
+            <tr>
+                <td class="info-name">Оплачено ранее</td>
+                <td class="info-value" id="res-old">0.00 ₽</td>
+            </tr>
+            <tr>
+                <td class="info-name">Срок полиса</td>
+                <td class="info-value" id="res-months">0 мес.</td>
+            </tr>
+            <tr>
+                <td class="info-name">Осталось дней</td>
+                <td class="info-value" id="res-remain">0</td>
+            </tr>
+            <tr>
+                <td class="info-name">Новая полная цена</td>
+                <td class="info-value" id="res-new-full">0.00 ₽</td>
+            </tr>
+        </table>
+    </div>
 </div>
 
 <!-- Авторство -->
@@ -392,8 +664,79 @@
   </a>
 </div>
 
-<script>
-/* ===== КТ по регионам ===== */
+    <script>
+        // Логика переключения вкладок
+        function switchTab(tab) {
+    document.querySelectorAll('.calc-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    
+    document.getElementById(tab + '-content').classList.add('active');
+    
+    document.querySelector(`button[onclick*="${tab}"]`).classList.add('active');
+}
+
+        // --- ЛОГИКА АДДЕНДУМА ---
+        function applyDateMask(input) {
+    input.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 8) value = value.slice(0, 8);
+        let formatted = '';
+        if (value.length > 0) formatted += value.substring(0, 2);
+        if (value.length > 2) formatted += '.' + value.substring(2, 4);
+        if (value.length > 4) formatted += '.' + value.substring(4, 8);
+        e.target.value = formatted;
+    });
+}
+
+function parseDate(str) {
+    const parts = str.split('.');
+    if (parts.length !== 3) return null;
+    return new Date(parts[2], parts[1] - 1, parts[0]);
+}
+
+function calculate() {
+    const getVal = (id) => {
+        let val = document.getElementById(id).value;
+        if (typeof val === 'string') val = val.replace(',', '.');
+        return parseFloat(val) || 0;
+    };
+
+    const dStart = parseDate(document.getElementById('dateStart').value);
+    const dEnd = parseDate(document.getElementById('dateEnd').value);
+    const dToday = new Date();
+    dToday.setHours(0,0,0,0);
+
+    if (!dStart || !dEnd) return;
+
+    const msPerDay = 24 * 60 * 60 * 1000;
+    // ИСПРАВЛЕНИЕ: Считаем разницу дней без инклюзивности (+1)
+    const totalDays = Math.round((dEnd - dStart) / msPerDay);
+    
+    // ИСПРАВЛЕНИЕ: Используем Math.floor, чтобы не считать сегодняшний день досрочно прожитым
+    let elapsed = Math.floor((dToday - dStart) / msPerDay);
+    if (elapsed < 0) elapsed = 0;
+    
+    const remaining = Math.max(0, totalDays - elapsed);
+    const months = Math.round(totalDays / 30.44);
+
+    const pOld = getVal('btOld') * getVal('ktOld') * getVal('kbmOld') * getVal('kvsOld') * getVal('koOld') * getVal('kmOld') * getVal('ksOld');
+    const pNewFull = getVal('btNew') * getVal('ktNew') * getVal('kbmNew') * getVal('kvsNew') * getVal('koNew') * getVal('kmNew') * getVal('ksNew');
+
+    const diff = pNewFull - pOld;
+    // Доплата считается только за остаток дней
+    const due = diff > 0 ? (diff / 365) * remaining : 0;
+
+    const formatCur = (num) => num.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+    document.getElementById('result-due').innerText = `${formatCur(due)} ₽`;
+    document.getElementById('res-old').innerText = `${formatCur(pOld)} ₽`;
+    document.getElementById('res-new-full').innerText = `${formatCur(pNewFull)} ₽`;
+    document.getElementById('res-months').innerText = `${months} мес.`;
+    document.getElementById('res-remain').innerText = remaining;
+}
+
+        // --- ЛОГИКА ОСАГО ---
+        /* ===== КТ по регионам ===== */
 const KT_MAP = {
   // Города федерального значения
   "77": { name: "Москва", baseKT: 1.8, cities: null },
@@ -1964,7 +2307,6 @@ function calcOSAGO() {
   const ksSelect = document.getElementById('ks');
   const birthInput = document.getElementById('birthDate');
   const expInput = document.getElementById('experienceDate');
-  const kvsBlock = document.getElementById('kvsBlock');
 
   const basePrice = parseFloat(vehicleEl.value) || 0;
   const vehicleText = vehicleEl.options[vehicleEl.selectedIndex].text;
@@ -1974,28 +2316,18 @@ function calcOSAGO() {
   const isAuto = vehicleText.includes('B ') || vehicleText.includes('Такси');
 
   // 2. Рассчитываем коэффициенты
-  let ko = 1, kbm = parseFloat(kbmEl.value) || 1, kvs = 1, ks = parseFloat(ksSelect.value) || 1;
+  let ko = 1, kbm = 1, kvs = 1, ks = parseFloat(ksSelect.value) || 1;
 
   if (noLimits) {
     ko = 3.16; 
     kbm = 1.17; 
     kvs = 1;
-    if(kbmEl) kbmEl.disabled = true;
-    if(birthInput) birthInput.disabled = true;
-    if(expInput) expInput.disabled = true;
   } else {
-    if(kbmEl) kbmEl.disabled = false;
-    if(birthInput) birthInput.disabled = false;
-    if(expInput) expInput.disabled = false;
+    kbm = parseFloat(kbmEl.value) || 1;
     const age = getAgeFromStr(birthInput.value);
     const exp = getAgeFromStr(expInput.value);
     kvs = getKvsValue(age, exp, isMoto);
   }
-  
-  if (kvsBlock) {
-  // Если галочка стоит, скрываем блок, иначе - показываем
-  kvsBlock.style.display = noLimits ? 'none' : 'block';
-}
 
   // 3. Мощность (KM)
   let km = 1;
@@ -2038,7 +2370,23 @@ function calcOSAGO() {
   updateTableCell('val-ks', ks);
 }
 
-/* ===== ОБНОВЛЕННАЯ ИНИЦИАЛИЗАЦИЯ ===== */
+// Функция для скрытия/показа полей КБМ и КВС
+function toggleOsagoFields() {
+    const checkbox = document.getElementById('noLimits');
+    const kbmSection = document.getElementById('section-kbm-container');
+    const kvsSection = document.getElementById('section-kvs-container');
+
+    if (!checkbox || !kbmSection || !kvsSection) return;
+
+    if (checkbox.checked) {
+        kbmSection.classList.add('hidden');
+        kvsSection.classList.add('hidden');
+    } else {
+        kbmSection.classList.remove('hidden');
+        kvsSection.classList.remove('hidden');
+    }
+}
+
 /* ===== ОБНОВЛЕННАЯ ИНИЦИАЛИЗАЦИЯ ===== */
 document.addEventListener('DOMContentLoaded', () => {
   const birthInput = document.getElementById('birthDate');
@@ -2046,6 +2394,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const vehicleSelect = document.getElementById('vehicle');
   const regionSelect = document.getElementById('region');
   const citySelect = document.getElementById('city');
+  const noLimitsCheckbox = document.getElementById('noLimits');
 
   if (birthInput) applyDateMask(birthInput);
   if (expInput) applyDateMask(expInput);
@@ -2065,9 +2414,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Если город тоже был сохранен, выбираем его
     if (savedCity) {
       // Небольшая задержка, чтобы список городов успел прогрузиться в DOM
-      citySelect.value = savedCity;
-      // Обновляем текущий KT из значения выбранного города
-      currentKT = parseFloat(citySelect.value) || 1;
+      setTimeout(() => {
+        citySelect.value = savedCity;
+        // Обновляем текущий KT из значения выбранного города
+        currentKT = parseFloat(citySelect.value) || 1;
+        calcOSAGO();
+      }, 0);
     }
   } else {
     // Если памяти нет, просто запускаем стандартное наполнение
@@ -2099,12 +2451,29 @@ document.addEventListener('DOMContentLoaded', () => {
         if (id === 'city') {
           currentKT = parseFloat(el.value);
         }
+        
+        // Особый случай для чекбокса noLimits - вызываем toggleOsagoFields
+        if (id === 'noLimits') {
+          toggleOsagoFields();
+        }
+        
         calcOSAGO();
       });
     }
   });
 
+  // Добавляем отдельный обработчик для чекбокса, если он не попал в цикл
+  if (noLimitsCheckbox) {
+    noLimitsCheckbox.addEventListener('change', toggleOsagoFields);
+  }
+
+  // Удаляем дублирующиеся обработчики в конце файла
+  // Убираем блоки:
+  // document.querySelectorAll('#osago-content input, #osago-content select').forEach...
+  // и document.querySelectorAll('#addendum-content input').forEach...
+  
   updateKT();
+  toggleOsagoFields(); // Важно! Вызываем при загрузке для установки правильного состояния
   calcOSAGO();
   
   // Логика работы конвертера кВт <-> л.с.
@@ -2132,11 +2501,7 @@ if (inputKW && inputHP) {
     });
 }
 });
-</script>
 
-
-
-
+    </script>
 </body>
 </html>
-
