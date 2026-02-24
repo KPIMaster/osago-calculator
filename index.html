@@ -1,19 +1,11 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-	<script async src="https://www.googletagmanager.com/gtag/js?id=G-JWF3J0HKVM"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-JWF3J0HKVM');
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Универсальный калькулятор ОСАГО</title>
     <style>
-        /* Общие стили для обоих калькуляторов */
+      
         body {
             background: #0f172a;
             color: #f1f5f9;
@@ -22,7 +14,7 @@
             padding: 15px;
         }
 
-        /* Навигация (Вкладки) */
+      
         .tabs-nav {
             display: flex;
             justify-content: center;
@@ -71,7 +63,7 @@
             .main-container { grid-template-columns: 1fr; }
         }
 
-        /* Общие стили блоков */
+        
         .input-section {
             background: #1e293b;
             padding: 24px;
@@ -148,7 +140,7 @@
         .date-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
 		
 		
-		/* Стили для сетки КВС */
+
 .kvs-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -166,7 +158,7 @@
     margin-bottom: 5px;
 }
 		
-		/* Стиль для основной кнопки расчета */
+
 #addendum-content button {
     width: 100%;
     background: #2563eb;
@@ -191,7 +183,7 @@
     transform: scale(0.98);
 }
 
-/* Контейнер для строки с тумблером */
+
 .toggle-wrapper {
     display: flex;
     align-items: center;
@@ -209,7 +201,7 @@
     color: #f1f5f9;
 }
 
-/* Сам тумблер (Switch) */
+
 .switch {
     position: relative;
     display: inline-block;
@@ -253,7 +245,7 @@ input:checked + .slider:before {
     transform: translateX(24px);
 }
 
-/* Анимация скрытия секций */
+
 .hidden-section {
     display: block;
     transition: opacity 0.3s ease;
@@ -308,7 +300,7 @@ input:checked + .slider:before {
 </select>
 </label>
 
-<!-- Мощность: мото -->
+
 <div id="powerMoto" style="display:none;">
 <label>
 Мощность двигателя (л.с.)
@@ -323,7 +315,7 @@ input:checked + .slider:before {
 </label>
 </div>
 
-<!-- Мощность: легковые -->
+
 <div id="powerAuto" style="display:none;">
 <label>
 Мощность двигателя (л.с.)
@@ -338,7 +330,7 @@ input:checked + .slider:before {
 </label>
 </div>
 
-<!-- Конвертер КВТ-ЛС -->
+
 <div id="powerConverter" style="display:none; margin-top: 15px; padding: 15px; background: #334155; border-radius: 12px; border: 1px solid #475569;">
     <h3 style="margin-top:0; font-size: 13px; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.5px;">Конвертер мощности</h3>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
@@ -441,14 +433,15 @@ input:checked + .slider:before {
 	<option value="81">81 Луганская Народная Республика</option>
     <option value="82">82 Ненецкий АО</option>
     <option value="83">83 ХМАО — Югра</option>
-    <option value="84">84 Чукотский АО</option>
     <option value="85">85 ЯНАО</option>
+	<option value="87">87 Чукотский АО</option>
 	<option value="91">91 Республика Крым</option>
     <option value="92">92 Севастополь</option>
     <option value="94">94 Байконур</option>
     <option value="95">95 Чеченская Республика</option>
   </select>
 </label>
+
 
 <div id="cityBlock" style="display:none">
   Населённый пункт
@@ -530,7 +523,7 @@ input:checked + .slider:before {
     </div>
 </div>
 
-<!-- Авторство -->
+
 <div style="
   max-width:1100px;
   margin:30px auto 10px;
@@ -673,7 +666,7 @@ input:checked + .slider:before {
 </div>
 
     <script>
-        // Логика переключения вкладок
+    
         function switchTab(tab) {
     document.querySelectorAll('.calc-content').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -683,7 +676,7 @@ input:checked + .slider:before {
     document.querySelector(`button[onclick*="${tab}"]`).classList.add('active');
 }
 
-        // --- ЛОГИКА АДДЕНДУМА ---
+  
         function applyDateMask(input) {
     input.addEventListener('input', (e) => {
         let value = e.target.value.replace(/\D/g, '');
@@ -717,10 +710,10 @@ function calculate() {
     if (!dStart || !dEnd) return;
 
     const msPerDay = 24 * 60 * 60 * 1000;
-    // ИСПРАВЛЕНИЕ: Считаем разницу дней без инклюзивности (+1)
+  
     const totalDays = Math.round((dEnd - dStart) / msPerDay);
     
-    // ИСПРАВЛЕНИЕ: Используем Math.floor, чтобы не считать сегодняшний день досрочно прожитым
+
     let elapsed = Math.floor((dToday - dStart) / msPerDay);
     if (elapsed < 0) elapsed = 0;
     
@@ -743,8 +736,6 @@ function calculate() {
     document.getElementById('res-remain').innerText = remaining;
 }
 
-        // --- ЛОГИКА ОСАГО ---
-        /* ===== КТ по регионам ===== */
 const KT_MAP = {
   // Города федерального значения
   "77": { name: "Москва", baseKT: 1.8, cities: null },
@@ -1461,9 +1452,9 @@ const KT_MAP = {
   "99": { name: "Байконур", baseKT: 0.82, cities: null }
 };
 
-/* ===== ТАБЛИЦА КТ ДЛЯ ТРАКТОРОВ (2026) ===== */
+
 const KT_TRACTOR_MAP = {
-  // Города федерального значения
+ 
   "77": { name: "Москва", baseKT: 1.24, cities: null },
   "78": { name: "Санкт-Петербург", baseKT: 1.0, cities: null },
   "92": { name: "Севастополь", baseKT: 0.82, cities: null },
@@ -2167,7 +2158,7 @@ const KT_TRACTOR_MAP = {
     }
   },
 
-  // Автономные округи
+
   "83": { name: "Ненецкий АО", baseKT: 0.6, cities: null },
   "86": {
     name: "Ханты-Мансийский АО — Югра",
@@ -2193,7 +2184,7 @@ const KT_TRACTOR_MAP = {
   },
   "99": { name: "Байконур", baseKT: 0.76, cities: null }
 };
-/* ===== 1. ТАБЛИЦЫ КВС (2026) ===== */
+
 const KVS_AUTO_TABLE = [
   [2.27, 1.92, 1.84, 1.65, 1.62], // 18-21
   [1.88, 1.72, 1.71, 1.13, 1.10, 1.09], // 22-24
@@ -2218,9 +2209,7 @@ const KVS_MOTO_TABLE = [
 
 let currentKT = 1;
 
-/* ===== 2. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ===== */
 
-// Маска для ввода даты (ДД.ММ.ГГГГ)
 function applyDateMask(el) {
   el.addEventListener('input', (e) => {
     let v = e.target.value.replace(/\D/g, '');
@@ -2231,7 +2220,7 @@ function applyDateMask(el) {
   });
 }
 
-// Парсинг даты из формата ДД.ММ.ГГГГ
+
 function getAgeFromStr(dateStr) {
   if (!dateStr || dateStr.length < 10) return 0;
   const parts = dateStr.split('.');
@@ -2246,26 +2235,22 @@ function getAgeFromStr(dateStr) {
 function getKvsValue(age, exp, isMoto) {
   const table = isMoto ? KVS_MOTO_TABLE : KVS_AUTO_TABLE;
   
-  // 1. Определяем индекс строки (Возраст)
-  // Для обеих ваших новых таблиц сетка возраста совпадает (8 строк)
+
   let rowIndex = age >= 60 ? 7 : age >= 50 ? 6 : age >= 40 ? 5 : age >= 35 ? 4 : 
                  age >= 30 ? 3 : age >= 25 ? 2 : age >= 22 ? 1 : 0;
 
-  // 2. Определяем идеальный индекс столбца (Стаж)
-  // 0, 1, 2, 3, 4, 5-6(5), 7-9(6), 10-14(7)
+
   let targetCol = exp >= 14 ? 7 : exp >= 10 ? 6 : exp >= 7 ? 5 : exp >= 5 ? 4 : 
                   exp >= 3 ? 3 : exp >= 2 ? 2 : exp >= 1 ? 1 : 0;
 
-  // 3. ПРЕДОХРАНИТЕЛЬ:
-  // Если в этой строке меньше столбцов, чем нам нужно (например, в строке [0] всего 5 элементов),
-  // мы берем последний доступный элемент в этой строке.
+
   const currentRow = table[rowIndex];
   const colIndex = Math.min(targetCol, currentRow.length - 1);
 
   return currentRow[colIndex];
 }
 
-/* ===== 3. ЛОГИКА КАЛЬКУЛЯТОРА ===== */
+
 
 function updateKT() {
   const regionEl = document.getElementById('region');
@@ -2274,10 +2259,10 @@ function updateKT() {
   const cityEl = document.getElementById('city');
   
   const regionCode = regionEl.value;
-  // Проверяем, выбрана ли категория тракторов
+
   const isTractor = vehicleEl.options[vehicleEl.selectedIndex].text.includes('Тракторы');
 
-  // Выбираем, какой словарь использовать
+
   const activeMap = isTractor ? KT_TRACTOR_MAP : KT_MAP;
 
   const regionData = activeMap[regionCode];
@@ -2289,11 +2274,11 @@ function updateKT() {
   }
 
   if (regionData.baseKT !== null) {
-    // Если для региона фиксированный КТ
+
     cityBox.style.display = 'none';
     currentKT = regionData.baseKT;
   } else {
-    // Если нужно выбирать город
+
     cityBox.style.display = 'block';
     cityEl.innerHTML = '';
     
@@ -2303,7 +2288,7 @@ function updateKT() {
       opt.textContent = name;
       cityEl.appendChild(opt);
     }
-    // Устанавливаем КТ из первого города в списке
+   
     currentKT = parseFloat(cityEl.value);
   }
 }
@@ -2319,25 +2304,30 @@ function calcOSAGO() {
   const basePrice = parseFloat(vehicleEl.value) || 0;
   const vehicleText = vehicleEl.options[vehicleEl.selectedIndex].text;
 
-  // 1. Определяем тип ТС
+
   const isMoto = vehicleText.includes('A ') || vehicleText.includes('M ');
   const isAuto = vehicleText.includes('B ') || vehicleText.includes('Такси');
 
-  // 2. Рассчитываем коэффициенты
-  let ko = 1, kbm = 1, kvs = 1, ks = parseFloat(ksSelect.value) || 1;
+
+  let ko = 1, kbm = parseFloat(kbmEl.value) || 1, kvs = 1, ks = parseFloat(ksSelect.value) || 1;
 
   if (noLimits) {
     ko = 3.16; 
     kbm = 1.17; 
     kvs = 1;
+    if(kbmEl) kbmEl.disabled = true;
+    if(birthInput) birthInput.disabled = true;
+    if(expInput) expInput.disabled = true;
   } else {
-    kbm = parseFloat(kbmEl.value) || 1;
+    if(kbmEl) kbmEl.disabled = false;
+    if(birthInput) birthInput.disabled = false;
+    if(expInput) expInput.disabled = false;
     const age = getAgeFromStr(birthInput.value);
     const exp = getAgeFromStr(expInput.value);
     kvs = getKvsValue(age, exp, isMoto);
   }
 
-  // 3. Мощность (KM)
+
   let km = 1;
   const pMotoBlock = document.getElementById('powerMoto');
   const pAutoBlock = document.getElementById('powerAuto');
@@ -2355,15 +2345,14 @@ function calcOSAGO() {
     km = pVal ? parseFloat(pVal.value) : 1;
   }
 
-  // 4. ИТОГОВЫЙ РАСЧЕТ
+
   const final = Math.round(basePrice * currentKT * kbm * kvs * ko * km * ks);
 
-  // 5. ЗАПОЛНЕНИЕ ТАБЛИЦЫ СПРАВА
-  // Обновляем итоговую сумму
+
   const resultEl = document.getElementById('result');
   if (resultEl) resultEl.innerText = `${final.toLocaleString()} ₽`;
   
-  // Функция для безопасного обновления ячеек таблицы
+
   const updateTableCell = (id, value) => {
     const el = document.getElementById(id);
     if (el) el.innerText = value;
@@ -2378,7 +2367,7 @@ function calcOSAGO() {
   updateTableCell('val-ks', ks);
 }
 
-// Функция для скрытия/показа полей КБМ и КВС
+
 function toggleOsagoFields() {
     const checkbox = document.getElementById('noLimits');
     const kbmSection = document.getElementById('section-kbm-container');
@@ -2395,7 +2384,7 @@ function toggleOsagoFields() {
     }
 }
 
-/* ===== ОБНОВЛЕННАЯ ИНИЦИАЛИЗАЦИЯ ===== */
+
 document.addEventListener('DOMContentLoaded', () => {
   const birthInput = document.getElementById('birthDate');
   const expInput = document.getElementById('experienceDate');
@@ -2407,7 +2396,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (birthInput) applyDateMask(birthInput);
   if (expInput) applyDateMask(expInput);
 
-  // 1. ЗАГРУЗКА ИЗ ПАМЯТИ ПРИ СТАРТЕ
+
   const savedVehicle = localStorage.getItem('vehicle');
   const savedRegion = localStorage.getItem('region');
   const savedCity = localStorage.getItem('city');
@@ -2416,25 +2405,25 @@ document.addEventListener('DOMContentLoaded', () => {
   
   if (savedRegion) {
     regionSelect.value = savedRegion;
-    // Наполняем список городов для сохраненного региона
+    
     updateKT(); 
     
-    // Если город тоже был сохранен, выбираем его
+
     if (savedCity) {
-      // Небольшая задержка, чтобы список городов успел прогрузиться в DOM
+
       setTimeout(() => {
         citySelect.value = savedCity;
-        // Обновляем текущий KT из значения выбранного города
+
         currentKT = parseFloat(citySelect.value) || 1;
         calcOSAGO();
       }, 0);
     }
   } else {
-    // Если памяти нет, просто запускаем стандартное наполнение
+
     updateKT();
   }
 
-  // 2. СЛЕДИМ ЗА ВСЕМИ ПОЛЯМИ
+
   const ids = [
     'vehicle', 'region', 'city', 'noLimits', 'kbm', 
     'birthDate', 'experienceDate', 'ks',
@@ -2447,7 +2436,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const eventType = (id === 'birthDate' || id === 'experienceDate') ? 'input' : 'change';
 
       el.addEventListener(eventType, () => {
-        // Сохраняем выбор в память
+
         if (id === 'region' || id === 'city' || id === 'vehicle') {
           localStorage.setItem(id, el.value);
         }
@@ -2460,7 +2449,7 @@ document.addEventListener('DOMContentLoaded', () => {
           currentKT = parseFloat(el.value);
         }
         
-        // Особый случай для чекбокса noLimits - вызываем toggleOsagoFields
+
         if (id === 'noLimits') {
           toggleOsagoFields();
         }
@@ -2470,21 +2459,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Добавляем отдельный обработчик для чекбокса, если он не попал в цикл
+
   if (noLimitsCheckbox) {
     noLimitsCheckbox.addEventListener('change', toggleOsagoFields);
   }
 
-  // Удаляем дублирующиеся обработчики в конце файла
-  // Убираем блоки:
-  // document.querySelectorAll('#osago-content input, #osago-content select').forEach...
-  // и document.querySelectorAll('#addendum-content input').forEach...
-  
   updateKT();
-  toggleOsagoFields(); // Важно! Вызываем при загрузке для установки правильного состояния
+  toggleOsagoFields(); 
   calcOSAGO();
   
-  // Логика работы конвертера кВт <-> л.с.
 const inputKW = document.getElementById('inputKW');
 const inputHP = document.getElementById('inputHP');
 const RATIO = 1.35962;
@@ -2513,4 +2496,3 @@ if (inputKW && inputHP) {
     </script>
 </body>
 </html>
-
