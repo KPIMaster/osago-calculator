@@ -2396,6 +2396,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (birthInput) applyDateMask(birthInput);
   if (expInput) applyDateMask(expInput);
 
+	const startInput = document.getElementById('dateStart');
+  const endInput = document.getElementById('dateEnd');
+  
+  if (startInput) applyDateMask(startInput);
+  if (endInput) applyDateMask(endInput);
+
 
   const savedVehicle = localStorage.getItem('vehicle');
   const savedRegion = localStorage.getItem('region');
@@ -2496,3 +2502,4 @@ if (inputKW && inputHP) {
     </script>
 </body>
 </html>
+
