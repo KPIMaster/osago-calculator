@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Универсальный калькулятор ОСАГО</title>
     <style>
-      
+    
         body {
             background: #0f172a;
             color: #f1f5f9;
@@ -14,7 +14,7 @@
             padding: 15px;
         }
 
-      
+     
         .tabs-nav {
             display: flex;
             justify-content: center;
@@ -63,7 +63,7 @@
             .main-container { grid-template-columns: 1fr; }
         }
 
-        
+      
         .input-section {
             background: #1e293b;
             padding: 24px;
@@ -140,7 +140,7 @@
         .date-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
 		
 		
-
+	
 .kvs-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -180,6 +180,31 @@
 }
 
 #addendum-content button:active {
+    transform: scale(0.98);
+}
+
+
+.calculate-btn {
+    width: 100%;
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.calculate-btn:hover {
+    background: #1d4ed8;
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.4);
+}
+
+.calculate-btn:active {
     transform: scale(0.98);
 }
 
@@ -262,6 +287,7 @@ input:checked + .slider:before {
     <div class="tabs-nav">
         <button class="tab-btn active" onclick="switchTab('osago')">Калькулятор ОСАГО</button>
         <button class="tab-btn" onclick="switchTab('addendum')">Калькулятор Аддендума</button>
+		<button class="tab-btn" onclick="switchTab('termination')">Калькулятор Расторжения</button>
     </div>
 
     <div id="osago-content" class="calc-content active">
@@ -523,7 +549,7 @@ input:checked + .slider:before {
     </div>
 </div>
 
-
+<!-- Авторство -->
 <div style="
   max-width:1100px;
   margin:30px auto 10px;
@@ -665,8 +691,87 @@ input:checked + .slider:before {
   </a>
 </div>
 
+</div> <!-- Закрытие addendum-content -->
+
+
+<div id="termination-content" class="calc-content">
+    <div class="main-container">
+        <div class="input-section">
+            <h2 style="margin-top:0; color:#fbbf24;">Расторжение ОСАГО</h2>
+            
+            <div class="date-group" style="grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                <div>
+                    <label>Начало полиса</label>
+                    <input id="termDateStart" class="date-input" type="text" maxlength="10" placeholder="ДД.ММ.ГГГГ">
+                </div>
+                <div>
+                    <label>Конец полиса</label>
+                    <input id="termDateEnd" class="date-input" type="text" maxlength="10" placeholder="ДД.ММ.ГГГГ">
+                </div>
+                <div>
+                    <label>Дата расторжения</label>
+                    <input id="termDateCancel" class="date-input" type="text" maxlength="10" placeholder="ДД.ММ.ГГГГ">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label>Стоимость полиса (₽)</label>
+                <input id="termPolicyPrice" type="number" placeholder="Например: 10000" step="0.01">
+            </div>
+
+            <button class="calculate-btn" onclick="calculateTermination()">Рассчитать возврат</button>
+            
+            <p style="font-size: 12px; color: #64748b; margin-top: 20px;">
+                * Расчет производится с учетом обязательного удержания 23% (РВД), согласно правилам ОСАГО.
+            </p>
+        </div>
+
+        <div class="result-section">
+            <div class="result-label" style="text-align:center; color:#94a3b8; font-size:14px;">К возврату на карту:</div>
+            <div class="result-total" id="resTermRefund">0.00 ₽</div>
+            
+            <table class="info-table">
+                <tr>
+                    <td class="info-name">Использовано дней</td>
+                    <td class="info-value" id="resTermUsedDays">0</td>
+                </tr>
+                <tr>
+                    <td class="info-name">Сумма за использ. дни</td>
+                    <td class="info-value" id="resTermUsedPrice">0.00 ₽</td>
+                </tr>
+                <tr>
+                    <td class="info-name">Осталось дней</td>
+                    <td class="info-value" id="resTermRemainDays">0</td>
+                </tr>
+                <tr>
+                    <td class="info-name">Неиспользованная сумма</td>
+                    <td class="info-value" id="resTermRemainPrice">0.00 ₽</td>
+                </tr>
+                <tr style="border-top: 2px solid #475569;">
+                    <td class="info-name" style="color: #fbbf24;">Удержание 23% (РВД)</td>
+                    <td class="info-value" style="color: #fbbf24;" id="resTermTax">- 0.00 ₽</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+	<!-- Авторство -->
+<div style="
+  max-width:1100px;
+  margin:30px auto 10px;
+  text-align:center;
+  font-size:12px;
+  color:#94a3b8;
+">
+  Калькулятор ОСАГО 2026 · версия 1.0<br>
+  Автор: KPI Master ·
+  <a href="https://t.me/KPImaster" target="_blank" style="color:#38bdf8; text-decoration:none;">
+    Telegram
+  </a>
+</div>
+</div>
+
     <script>
-    
+     
         function switchTab(tab) {
     document.querySelectorAll('.calc-content').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -676,7 +781,6 @@ input:checked + .slider:before {
     document.querySelector(`button[onclick*="${tab}"]`).classList.add('active');
 }
 
-  
         function applyDateMask(input) {
     input.addEventListener('input', (e) => {
         let value = e.target.value.replace(/\D/g, '');
@@ -710,10 +814,10 @@ function calculate() {
     if (!dStart || !dEnd) return;
 
     const msPerDay = 24 * 60 * 60 * 1000;
-  
+    // ИСПРАВЛЕНИЕ: Считаем разницу дней без инклюзивности (+1)
     const totalDays = Math.round((dEnd - dStart) / msPerDay);
     
-
+    // ИСПРАВЛЕНИЕ: Используем Math.floor, чтобы не считать сегодняшний день досрочно прожитым
     let elapsed = Math.floor((dToday - dStart) / msPerDay);
     if (elapsed < 0) elapsed = 0;
     
@@ -724,7 +828,7 @@ function calculate() {
     const pNewFull = getVal('btNew') * getVal('ktNew') * getVal('kbmNew') * getVal('kvsNew') * getVal('koNew') * getVal('kmNew') * getVal('ksNew');
 
     const diff = pNewFull - pOld;
-    // Доплата считается только за остаток дней
+
     const due = diff > 0 ? (diff / 365) * remaining : 0;
 
     const formatCur = (num) => num.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2});
@@ -736,6 +840,7 @@ function calculate() {
     document.getElementById('res-remain').innerText = remaining;
 }
 
+    
 const KT_MAP = {
   // Города федерального значения
   "77": { name: "Москва", baseKT: 1.8, cities: null },
@@ -1452,9 +1557,9 @@ const KT_MAP = {
   "99": { name: "Байконур", baseKT: 0.82, cities: null }
 };
 
-
+/* ===== ТАБЛИЦА КТ ДЛЯ ТРАКТОРОВ (2026) ===== */
 const KT_TRACTOR_MAP = {
- 
+  // Города федерального значения
   "77": { name: "Москва", baseKT: 1.24, cities: null },
   "78": { name: "Санкт-Петербург", baseKT: 1.0, cities: null },
   "92": { name: "Севастополь", baseKT: 0.82, cities: null },
@@ -2158,7 +2263,7 @@ const KT_TRACTOR_MAP = {
     }
   },
 
-
+  // Автономные округи
   "83": { name: "Ненецкий АО", baseKT: 0.6, cities: null },
   "86": {
     name: "Ханты-Мансийский АО — Югра",
@@ -2288,7 +2393,7 @@ function updateKT() {
       opt.textContent = name;
       cityEl.appendChild(opt);
     }
-   
+
     currentKT = parseFloat(cityEl.value);
   }
 }
@@ -2395,8 +2500,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (birthInput) applyDateMask(birthInput);
   if (expInput) applyDateMask(expInput);
-
-	const startInput = document.getElementById('dateStart');
+  
+  const startInput = document.getElementById('dateStart');
   const endInput = document.getElementById('dateEnd');
   
   if (startInput) applyDateMask(startInput);
@@ -2411,7 +2516,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   if (savedRegion) {
     regionSelect.value = savedRegion;
-    
+
     updateKT(); 
     
 
@@ -2419,7 +2524,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       setTimeout(() => {
         citySelect.value = savedCity;
-
+  
         currentKT = parseFloat(citySelect.value) || 1;
         calcOSAGO();
       }, 0);
@@ -2454,7 +2559,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (id === 'city') {
           currentKT = parseFloat(el.value);
         }
-        
 
         if (id === 'noLimits') {
           toggleOsagoFields();
@@ -2470,10 +2574,27 @@ document.addEventListener('DOMContentLoaded', () => {
     noLimitsCheckbox.addEventListener('change', toggleOsagoFields);
   }
 
+
+    const termStartInput = document.getElementById('termDateStart');
+    const termEndInput = document.getElementById('termDateEnd');
+    const termCancelInput = document.getElementById('termDateCancel');
+    
+    if (termStartInput) applyTerminationDateMask(termStartInput);
+    if (termEndInput) applyTerminationDateMask(termEndInput);
+    if (termCancelInput) {
+        applyTerminationDateMask(termCancelInput);
+
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        termCancelInput.value = `${day}.${month}.${today.getFullYear()}`;
+    }
+  
   updateKT();
   toggleOsagoFields(); 
   calcOSAGO();
   
+
 const inputKW = document.getElementById('inputKW');
 const inputHP = document.getElementById('inputHP');
 const RATIO = 1.35962;
@@ -2499,7 +2620,70 @@ if (inputKW && inputHP) {
 }
 });
 
+
+function applyTerminationDateMask(input) {
+    input.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 8) value = value.slice(0, 8);
+        let formatted = '';
+        if (value.length > 0) formatted += value.substring(0, 2);
+        if (value.length > 2) formatted += '.' + value.substring(2, 4);
+        if (value.length > 4) formatted += '.' + value.substring(4, 8);
+        e.target.value = formatted;
+    });
+}
+
+function parseTerminationDate(str) {
+    const parts = str.split('.');
+    if (parts.length !== 3) return null;
+    return new Date(parts[2], parts[1] - 1, parts[0]);
+}
+
+function calculateTermination() {
+    const price = parseFloat(document.getElementById('termPolicyPrice').value) || 0;
+    const dStart = parseTerminationDate(document.getElementById('termDateStart').value);
+    const dEnd = parseTerminationDate(document.getElementById('termDateEnd').value);
+    const dCancel = parseTerminationDate(document.getElementById('termDateCancel').value);
+
+    if (!dStart || !dEnd || !dCancel || price <= 0) {
+        alert("Пожалуйста, заполните все поля корректно");
+        return;
+    }
+
+    const msPerDay = 24 * 60 * 60 * 1000;
+    
+
+    const totalDays = Math.round((dEnd - dStart) / msPerDay);
+    
+
+    let usedDays = Math.floor((dCancel - dStart) / msPerDay);
+    if (usedDays < 0) usedDays = 0;
+    if (usedDays > totalDays) usedDays = totalDays;
+
+
+    const remainDays = Math.max(0, totalDays - usedDays);
+    
+
+    const pricePerDay = price / totalDays;
+    
+
+    const usedPrice = pricePerDay * usedDays;
+    const remainPrice = pricePerDay * remainDays;
+    
+
+    const tax = remainPrice * 0.23;
+    const finalRefund = remainPrice - tax;
+
+    const formatCur = (num) => num.toLocaleString('ru-RU', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+    document.getElementById('resTermRefund').innerText = `${formatCur(finalRefund)} ₽`;
+    document.getElementById('resTermUsedDays').innerText = usedDays;
+    document.getElementById('resTermUsedPrice').innerText = `${formatCur(usedPrice)} ₽`;
+    document.getElementById('resTermRemainDays').innerText = remainDays;
+    document.getElementById('resTermRemainPrice').innerText = `${formatCur(remainPrice)} ₽`;
+    document.getElementById('resTermTax').innerText = `- ${formatCur(tax)} ₽`;
+}
+
     </script>
 </body>
 </html>
-
