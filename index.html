@@ -13,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Универсальный калькулятор ОСАГО</title>
     <style>
-    
+        /* Общие стили для обоих калькуляторов */
         body {
             background: #0f172a;
             color: #f1f5f9;
@@ -22,18 +22,19 @@
             padding: 15px;
         }
 
-     
+        /* Навигация (Вкладки) */
+        /* Улучшенная адаптивность для вкладок на мобильных */
 .tabs-nav {
     display: flex;
     justify-content: center;
     gap: 8px;
     max-width: 1100px;
     margin: 0 auto 20px;
-    flex-wrap: wrap; 
+    flex-wrap: wrap; /* Добавляем перенос на новую строку */
 }
 
 .tab-btn {
-    padding: 12px 16px; 
+    padding: 12px 16px; /* Уменьшаем горизонтальные отступы */
     background: #1e293b;
     color: #94a3b8;
     border: 2px solid #334155;
@@ -43,12 +44,12 @@
     transition: all 0.3s;
     text-transform: uppercase;
     font-size: 13px;
-    white-space: nowrap; 
-    flex: 0 1 auto; 
-    min-width: fit-content; 
+    white-space: nowrap; /* Запрещаем перенос текста */
+    flex: 0 1 auto; /* Позволяем кнопкам сжиматься */
+    min-width: fit-content; /* Минимальная ширина по содержимому */
 }
 
-
+/* Медиа-запрос для очень маленьких экранов */
 @media (max-width: 480px) {
     .tabs-nav {
         gap: 5px;
@@ -61,7 +62,7 @@
     }
 }
 
-
+/* Для экранов до 360px - делаем кнопки на всю ширину */
 @media (max-width: 360px) {
     .tabs-nav {
         flex-direction: column;
@@ -70,7 +71,7 @@
     
     .tab-btn {
         width: 100%;
-        white-space: normal; 
+        white-space: normal; /* Разрешаем перенос текста */
         font-size: 12px;
         padding: 12px;
     }
@@ -103,7 +104,7 @@
             .main-container { grid-template-columns: 1fr; }
         }
 
-      
+        /* Общие стили блоков */
         .input-section {
             background: #1e293b;
             padding: 24px;
@@ -161,7 +162,7 @@
             border-bottom: 2px solid #334155;
             padding-bottom: 15px;
         }
-
+		
 		.result-total.negative {
             color: #f97316;
         }
@@ -184,7 +185,7 @@
         .date-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
 		
 		
-	
+		/* Стили для сетки КВС */
 .kvs-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -202,7 +203,7 @@
     margin-bottom: 5px;
 }
 		
-
+		/* Стиль для основной кнопки расчета */
 #addendum-content button {
     width: 100%;
     background: #2563eb;
@@ -227,7 +228,7 @@
     transform: scale(0.98);
 }
 
-
+/* Стиль для кнопки расчета (единый для всех калькуляторов) */
 .calculate-btn {
     width: 100%;
     background: #2563eb;
@@ -252,7 +253,7 @@
     transform: scale(0.98);
 }
 
-
+/* Контейнер для строки с тумблером */
 .toggle-wrapper {
     display: flex;
     align-items: center;
@@ -270,7 +271,7 @@
     color: #f1f5f9;
 }
 
-
+/* Сам тумблер (Switch) */
 .switch {
     position: relative;
     display: inline-block;
@@ -314,7 +315,7 @@ input:checked + .slider:before {
     transform: translateX(24px);
 }
 
-
+/* Анимация скрытия секций */
 .hidden-section {
     display: block;
     transition: opacity 0.3s ease;
@@ -324,6 +325,232 @@ input:checked + .slider:before {
     display: none !important;
 }
 
+/* Кнопка ручного режима */
+.manual-btn {
+    width: 100%;
+    background: #8b5cf6;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.2s;
+}
+.manual-btn:hover { background: #7c3aed; box-shadow: 0 0 12px rgba(139,92,246,0.5); }
+
+/* Модальное окно ручного режима */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.2s;
+}
+.modal-overlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+.manual-modal {
+    background: #1e293b;
+    border-radius: 28px;
+    max-width: 500px;
+    width: 90%;
+    padding: 20px;
+    border: 2px solid #8b5cf6;
+    box-shadow: 0 20px 35px rgba(0,0,0,0.5);
+}
+.manual-modal h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+.coeff-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    background: #0f172a;
+    padding: 10px 15px;
+    border-radius: 14px;
+}
+.coeff-row label {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    flex: 0 0 90px;
+    color: #cbd5e1;
+}
+.coeff-row input {
+    flex: 1;
+    margin: 0;
+    padding: 10px;
+    font-size: 14px;
+}
+.modal-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+.modal-actions button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 40px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+}
+.btn-apply { background: #10b981; color: white; }
+.btn-cancel { background: #475569; color: white; }
+.reset-manual {
+    background: #f97316;
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 40px;
+    border: none;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}
+.indicator-badge {
+    background: #8b5cf6;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-left: 8px;
+    color: white;
+}
+/* ===== АДАПТИВНОСТЬ МОДАЛЬНОГО ОКНА ДЛЯ МОБИЛЬНЫХ ===== */
+.manual-modal {
+    max-height: 90vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.manual-modal::-webkit-scrollbar {
+    width: 5px;
+}
+
+.manual-modal::-webkit-scrollbar-track {
+    background: #334155;
+    border-radius: 10px;
+}
+
+.manual-modal::-webkit-scrollbar-thumb {
+    background: #8b5cf6;
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .manual-modal {
+        width: 95%;
+        max-width: none;
+        padding: 15px;
+        max-height: 85vh;
+        border-radius: 20px;
+    }
+    
+    .manual-modal h3 {
+        font-size: 16px;
+        margin-bottom: 15px;
+    }
+    
+    .coeff-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        padding: 12px;
+    }
+    
+    .coeff-row label {
+        flex: none;
+        margin-bottom: 5px;
+        font-size: 12px;
+    }
+    
+    .coeff-row input {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    .modal-actions {
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .modal-actions button {
+        padding: 12px;
+        font-size: 14px;
+    }
+    
+    .reset-manual {
+        padding: 10px;
+        font-size: 13px;
+        margin-top: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .manual-modal {
+        width: 98%;
+        padding: 12px;
+        max-height: 90vh;
+    }
+    
+    .manual-modal h3 {
+        font-size: 15px;
+    }
+    
+    .coeff-row {
+        padding: 10px;
+        margin-bottom: 12px;
+    }
+    
+    .coeff-row label {
+        font-size: 11px;
+    }
+    
+    .coeff-row input {
+        padding: 8px;
+        font-size: 13px;
+    }
+    
+    .modal-actions button {
+        padding: 10px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+    .manual-modal {
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+    
+    .coeff-row {
+        flex-direction: row;
+        gap: 10px;
+    }
+    
+    .coeff-row label {
+        flex: 0 0 80px;
+    }
+}
     </style>
 </head>
 <body>
@@ -370,7 +597,7 @@ input:checked + .slider:before {
 </select>
 </label>
 
-
+<!-- Мощность: мото -->
 <div id="powerMoto" style="display:none;">
 <label>
 Мощность двигателя (л.с.)
@@ -385,7 +612,7 @@ input:checked + .slider:before {
 </label>
 </div>
 
-
+<!-- Мощность: легковые -->
 <div id="powerAuto" style="display:none;">
 <label>
 Мощность двигателя (л.с.)
@@ -400,7 +627,7 @@ input:checked + .slider:before {
 </label>
 </div>
 
-
+<!-- Конвертер КВТ-ЛС -->
 <div id="powerConverter" style="display:none; margin-top: 15px; padding: 15px; background: #334155; border-radius: 12px; border: 1px solid #475569;">
     <h3 style="margin-top:0; font-size: 13px; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.5px;">Конвертер мощности</h3>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
@@ -576,6 +803,10 @@ input:checked + .slider:before {
     <option value="0.5">3 месяца</option>
   </select>
 </label>
+
+<!-- Кнопка ручного режима -->
+<button type="button" class="manual-btn" id="openManualBtn">✏️ Ручной режим (коэффициенты)</button>
+
 </div>
 
 <div class="result-section">
@@ -601,7 +832,7 @@ input:checked + .slider:before {
   font-size:12px;
   color:#94a3b8;
 ">
-  Калькулятор ОСАГО 2026 · версия 1.0<br>
+  Калькулятор ОСАГО 2026 · версия 2.0<br>
   Автор: KPI Master ·
   <a href="https://t.me/KPImaster" target="_blank" style="color:#38bdf8; text-decoration:none;">
     Telegram
@@ -773,7 +1004,7 @@ input:checked + .slider:before {
   font-size:12px;
   color:#94a3b8;
 ">
-  Калькулятор ОСАГО 2026 · версия 1.0<br>
+  Калькулятор ОСАГО 2026 · версия 2.0<br>
   Автор: KPI Master ·
   <a href="https://t.me/KPImaster" target="_blank" style="color:#38bdf8; text-decoration:none;">
     Telegram
@@ -782,7 +1013,7 @@ input:checked + .slider:before {
 
 </div> <!-- Закрытие addendum-content -->
 
-
+<!-- НОВАЯ ВКЛАДКА: Калькулятор расторжения -->
 <div id="termination-content" class="calc-content">
     <div class="main-container">
         <div class="input-section">
@@ -851,7 +1082,7 @@ input:checked + .slider:before {
   font-size:12px;
   color:#94a3b8;
 ">
-  Калькулятор ОСАГО 2026 · версия 1.0<br>
+  Калькулятор ОСАГО 2026 · версия 2.0<br>
   Автор: KPI Master ·
   <a href="https://t.me/KPImaster" target="_blank" style="color:#38bdf8; text-decoration:none;">
     Telegram
@@ -860,7 +1091,12 @@ input:checked + .slider:before {
 </div>
 
     <script>
-     
+	
+	// ===== ПЕРЕМЕННЫЕ ДЛЯ РУЧНОГО РЕЖИМА =====
+let manualOverridesActive = false;
+let manualCoeffs = { bt: null, kt: null, kbm: null, kvs: null, ko: null, km: null, ks: null };
+
+        // Логика переключения вкладок
         function switchTab(tab) {
     document.querySelectorAll('.calc-content').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1097,7 +1333,8 @@ function calculate() {
     document.getElementById('res-remain').innerText = remaining;
 }
 
-    
+        // --- ЛОГИКА ОСАГО ---
+        /* ===== КТ по регионам ===== */
 const KT_MAP = {
   // Города федерального значения
   "77": { name: "Москва", baseKT: 1.8, cities: null },
@@ -2546,7 +2783,7 @@ const KT_TRACTOR_MAP = {
   },
   "99": { name: "Байконур", baseKT: 0.76, cities: null }
 };
-
+/* ===== 1. ТАБЛИЦЫ КВС (2026) ===== */
 const KVS_AUTO_TABLE = [
   [2.27, 1.92, 1.84, 1.65, 1.62], // 18-21
   [1.88, 1.72, 1.71, 1.13, 1.10, 1.09], // 22-24
@@ -2571,7 +2808,9 @@ const KVS_MOTO_TABLE = [
 
 let currentKT = 1;
 
+/* ===== 2. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ===== */
 
+// Маска для ввода даты (ДД.ММ.ГГГГ)
 function applyDateMask(el) {
   el.addEventListener('input', (e) => {
     let v = e.target.value.replace(/\D/g, '');
@@ -2582,7 +2821,7 @@ function applyDateMask(el) {
   });
 }
 
-
+// Парсинг даты из формата ДД.ММ.ГГГГ
 function getAgeFromStr(dateStr) {
   if (!dateStr || dateStr.length < 10) return 0;
   const parts = dateStr.split('.');
@@ -2597,22 +2836,26 @@ function getAgeFromStr(dateStr) {
 function getKvsValue(age, exp, isMoto) {
   const table = isMoto ? KVS_MOTO_TABLE : KVS_AUTO_TABLE;
   
-
+  // 1. Определяем индекс строки (Возраст)
+  // Для обеих ваших новых таблиц сетка возраста совпадает (8 строк)
   let rowIndex = age >= 60 ? 7 : age >= 50 ? 6 : age >= 40 ? 5 : age >= 35 ? 4 : 
                  age >= 30 ? 3 : age >= 25 ? 2 : age >= 22 ? 1 : 0;
 
-
+  // 2. Определяем идеальный индекс столбца (Стаж)
+  // 0, 1, 2, 3, 4, 5-6(5), 7-9(6), 10-14(7)
   let targetCol = exp >= 14 ? 7 : exp >= 10 ? 6 : exp >= 7 ? 5 : exp >= 5 ? 4 : 
                   exp >= 3 ? 3 : exp >= 2 ? 2 : exp >= 1 ? 1 : 0;
 
-
+  // 3. ПРЕДОХРАНИТЕЛЬ:
+  // Если в этой строке меньше столбцов, чем нам нужно (например, в строке [0] всего 5 элементов),
+  // мы берем последний доступный элемент в этой строке.
   const currentRow = table[rowIndex];
   const colIndex = Math.min(targetCol, currentRow.length - 1);
 
   return currentRow[colIndex];
 }
 
-
+/* ===== 3. ЛОГИКА КАЛЬКУЛЯТОРА ===== */
 
 function updateKT() {
   const regionEl = document.getElementById('region');
@@ -2621,10 +2864,10 @@ function updateKT() {
   const cityEl = document.getElementById('city');
   
   const regionCode = regionEl.value;
-
+  // Проверяем, выбрана ли категория тракторов
   const isTractor = vehicleEl.options[vehicleEl.selectedIndex].text.includes('Тракторы');
 
-
+  // Выбираем, какой словарь использовать
   const activeMap = isTractor ? KT_TRACTOR_MAP : KT_MAP;
 
   const regionData = activeMap[regionCode];
@@ -2636,11 +2879,11 @@ function updateKT() {
   }
 
   if (regionData.baseKT !== null) {
-
+    // Если для региона фиксированный КТ
     cityBox.style.display = 'none';
     currentKT = regionData.baseKT;
   } else {
-
+    // Если нужно выбирать город
     cityBox.style.display = 'block';
     cityEl.innerHTML = '';
     
@@ -2650,7 +2893,7 @@ function updateKT() {
       opt.textContent = name;
       cityEl.appendChild(opt);
     }
-
+    // Устанавливаем КТ из первого города в списке
     currentKT = parseFloat(cityEl.value);
   }
 }
@@ -2666,11 +2909,11 @@ function calcOSAGO() {
   const basePrice = parseFloat(vehicleEl.value) || 0;
   const vehicleText = vehicleEl.options[vehicleEl.selectedIndex].text;
 
-
+  // 1. Определяем тип ТС
   const isMoto = vehicleText.includes('A ') || vehicleText.includes('M ');
   const isAuto = vehicleText.includes('B ') || vehicleText.includes('Такси');
 
-
+  // 2. Рассчитываем коэффициенты
   let ko = 1, kbm = parseFloat(kbmEl.value) || 1, kvs = 1, ks = parseFloat(ksSelect.value) || 1;
 
   if (noLimits) {
@@ -2689,7 +2932,7 @@ function calcOSAGO() {
     kvs = getKvsValue(age, exp, isMoto);
   }
 
-
+  // 3. Мощность (KM)
   let km = 1;
   const pMotoBlock = document.getElementById('powerMoto');
   const pAutoBlock = document.getElementById('powerAuto');
@@ -2707,29 +2950,55 @@ function calcOSAGO() {
     km = pVal ? parseFloat(pVal.value) : 1;
   }
 
+  let kt = currentKT;
+  let btFinal = basePrice;
+  
+  // Ручной режим - переопределяем значения
+  if(manualOverridesActive){
+    if(manualCoeffs.bt !== null) btFinal = manualCoeffs.bt;
+    if(manualCoeffs.kt !== null) kt = manualCoeffs.kt;
+    if(manualCoeffs.kbm !== null) kbm = manualCoeffs.kbm;
+    if(manualCoeffs.kvs !== null) kvs = manualCoeffs.kvs;
+    if(manualCoeffs.ko !== null) ko = manualCoeffs.ko;
+    if(manualCoeffs.km !== null) km = manualCoeffs.km;
+    if(manualCoeffs.ks !== null) ks = manualCoeffs.ks;
+  }
 
-  const final = Math.round(basePrice * currentKT * kbm * kvs * ko * km * ks);
+  // 4. ИТОГОВЫЙ РАСЧЕТ
+  const final = Math.round(btFinal * kt * kbm * kvs * ko * km * ks);
 
-
+  // 5. ЗАПОЛНЕНИЕ ТАБЛИЦЫ СПРАВА
   const resultEl = document.getElementById('result');
   if (resultEl) resultEl.innerText = `${final.toLocaleString()} ₽`;
   
-
   const updateTableCell = (id, value) => {
     const el = document.getElementById(id);
     if (el) el.innerText = value;
   };
 
-  updateTableCell('val-bt', basePrice);
-  updateTableCell('val-kt', currentKT);
+  updateTableCell('val-bt', btFinal);
+  updateTableCell('val-kt', kt);
   updateTableCell('val-kbm', kbm);
   updateTableCell('val-kvs', kvs);
   updateTableCell('val-ko', ko);
   updateTableCell('val-km', km);
   updateTableCell('val-ks', ks);
+  
+  // Индикатор ручного режима
+  let hint = document.getElementById('manualModeHint');
+  if(!hint) {
+    let container = document.querySelector('#osago-content .result-section');
+    if(container) container.insertAdjacentHTML('beforeend', '<div style="margin-top:12px; font-size:11px; text-align:center; color:#94a3b8;"><span id="manualModeHint"></span></div>');
+    hint = document.getElementById('manualModeHint');
+  }
+  if(manualOverridesActive) hint.innerHTML = '🔧 <span style="color:#f97316;">Ручной режим активен</span> <button id="exitManualBtn" style="background:#334155; border:none; border-radius:16px; padding:2px 10px; margin-left:8px; cursor:pointer;">Отключить</button>';
+  else hint.innerHTML = '⚙️ Коэффициенты расчитаны автоматически. Нажмите "Ручной режим" для правки.';
+  
+  let exitBtn = document.getElementById('exitManualBtn');
+  if(exitBtn) exitBtn.onclick = () => { manualOverridesActive = false; manualCoeffs = {bt:null,kt:null,kbm:null,kvs:null,ko:null,km:null,ks:null}; calcOSAGO(); };
 }
 
-
+// Функция для скрытия/показа полей КБМ и КВС
 function toggleOsagoFields() {
     const checkbox = document.getElementById('noLimits');
     const kbmSection = document.getElementById('section-kbm-container');
@@ -2746,7 +3015,7 @@ function toggleOsagoFields() {
     }
 }
 
-
+/* ===== ОБНОВЛЕННАЯ ИНИЦИАЛИЗАЦИЯ ===== */
 document.addEventListener('DOMContentLoaded', () => {
   const birthInput = document.getElementById('birthDate');
   const expInput = document.getElementById('experienceDate');
@@ -2764,7 +3033,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (startInput) applyDateMask(startInput);
   if (endInput) applyDateMask(endInput);
 
-
+  // 1. ЗАГРУЗКА ИЗ ПАМЯТИ ПРИ СТАРТЕ
   const savedVehicle = localStorage.getItem('vehicle');
   const savedRegion = localStorage.getItem('region');
   const savedCity = localStorage.getItem('city');
@@ -2773,25 +3042,25 @@ document.addEventListener('DOMContentLoaded', () => {
   
   if (savedRegion) {
     regionSelect.value = savedRegion;
-
+    // Наполняем список городов для сохраненного региона
     updateKT(); 
     
-
+    // Если город тоже был сохранен, выбираем его
     if (savedCity) {
-
+      // Небольшая задержка, чтобы список городов успел прогрузиться в DOM
       setTimeout(() => {
         citySelect.value = savedCity;
-  
+        // Обновляем текущий KT из значения выбранного города
         currentKT = parseFloat(citySelect.value) || 1;
         calcOSAGO();
       }, 0);
     }
   } else {
-
+    // Если памяти нет, просто запускаем стандартное наполнение
     updateKT();
   }
 
-
+  // 2. СЛЕДИМ ЗА ВСЕМИ ПОЛЯМИ
   const ids = [
     'vehicle', 'region', 'city', 'noLimits', 'kbm', 
     'birthDate', 'experienceDate', 'ks',
@@ -2804,7 +3073,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const eventType = (id === 'birthDate' || id === 'experienceDate') ? 'input' : 'change';
 
       el.addEventListener(eventType, () => {
-
+        // Сохраняем выбор в память
         if (id === 'region' || id === 'city' || id === 'vehicle') {
           localStorage.setItem(id, el.value);
         }
@@ -2816,7 +3085,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (id === 'city') {
           currentKT = parseFloat(el.value);
         }
-
+        
+        // Особый случай для чекбокса noLimits - вызываем toggleOsagoFields
         if (id === 'noLimits') {
           toggleOsagoFields();
         }
@@ -2826,12 +3096,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-
+  // Добавляем отдельный обработчик для чекбокса, если он не попал в цикл
   if (noLimitsCheckbox) {
     noLimitsCheckbox.addEventListener('change', toggleOsagoFields);
   }
 
-
+  // Удаляем дублирующиеся обработчики в конце файла
+  // Убираем блоки:
+  // document.querySelectorAll('#osago-content input, #osago-content select').forEach...
+  // и document.querySelectorAll('#addendum-content input').forEach...
+  
+   // Добавьте инициализацию для калькулятора расторжения
     const termStartInput = document.getElementById('termDateStart');
     const termEndInput = document.getElementById('termDateEnd');
     const termCancelInput = document.getElementById('termDateCancel');
@@ -2840,7 +3115,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (termEndInput) applyTerminationDateMask(termEndInput);
     if (termCancelInput) {
         applyTerminationDateMask(termCancelInput);
-
+        // Установим сегодня в дату расторжения по умолчанию
         const today = new Date();
         const day = String(today.getDate()).padStart(2, '0');
         const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -2848,10 +3123,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   
   updateKT();
-  toggleOsagoFields(); 
+  toggleOsagoFields(); // Важно! Вызываем при загрузке для установки правильного состояния
   calcOSAGO();
   
-
+  // Логика работы конвертера кВт <-> л.с.
 const inputKW = document.getElementById('inputKW');
 const inputHP = document.getElementById('inputHP');
 const RATIO = 1.35962;
@@ -2875,9 +3150,58 @@ if (inputKW && inputHP) {
         }
     });
 }
+
+// ===== МОДАЛЬНОЕ ОКНО РУЧНОГО РЕЖИМА =====
+const modal = document.getElementById('manualModal');
+const openBtn = document.getElementById('openManualBtn');
+const cancelBtn = document.getElementById('cancelManualBtn');
+const applyBtn = document.getElementById('applyManualBtn');
+const resetManualBtn = document.getElementById('resetManualBtn');
+
+function fillModalFromCurrent(){
+    document.getElementById('manualBt').value = parseFloat(document.getElementById('val-bt').innerText) || 8665;
+    document.getElementById('manualKt').value = parseFloat(document.getElementById('val-kt').innerText) || 1;
+    document.getElementById('manualKbm').value = parseFloat(document.getElementById('val-kbm').innerText) || 1;
+    document.getElementById('manualKvs').value = parseFloat(document.getElementById('val-kvs').innerText) || 1;
+    document.getElementById('manualKo').value = parseFloat(document.getElementById('val-ko').innerText) || 1;
+    document.getElementById('manualKm').value = parseFloat(document.getElementById('val-km').innerText) || 1;
+    document.getElementById('manualKs').value = parseFloat(document.getElementById('val-ks').innerText) || 1;
+}
+
+function resetToAuto(){
+    manualOverridesActive = false;
+    manualCoeffs = {bt:null,kt:null,kbm:null,kvs:null,ko:null,km:null,ks:null};
+    calcOSAGO();
+    if(modal) modal.classList.remove('active');
+}
+
+// ОСНОВНЫЕ ОБРАБОТЧИКИ (только они, без дублирования)
+if(openBtn) openBtn.onclick = () => { fillModalFromCurrent(); if(modal) modal.classList.add('active'); };
+if(cancelBtn) cancelBtn.onclick = () => { if(modal) modal.classList.remove('active'); };
+if(resetManualBtn) resetManualBtn.onclick = () => { resetToAuto(); };
+if(applyBtn) applyBtn.onclick = () => {
+    let newBt = parseFloat(document.getElementById('manualBt').value);
+    let newKt = parseFloat(document.getElementById('manualKt').value);
+    let newKbm = parseFloat(document.getElementById('manualKbm').value);
+    let newKvs = parseFloat(document.getElementById('manualKvs').value);
+    let newKo = parseFloat(document.getElementById('manualKo').value);
+    let newKm = parseFloat(document.getElementById('manualKm').value);
+    let newKs = parseFloat(document.getElementById('manualKs').value);
+    if(isNaN(newBt)) newBt = 8665;
+    if(isNaN(newKt)) newKt = 1;
+    if(isNaN(newKbm)) newKbm = 1;
+    if(isNaN(newKvs)) newKvs = 1;
+    if(isNaN(newKo)) newKo = 1;
+    if(isNaN(newKm)) newKm = 1;
+    if(isNaN(newKs)) newKs = 1;
+    manualCoeffs = {bt:newBt, kt:newKt, kbm:newKbm, kvs:newKvs, ko:newKo, km:newKm, ks:newKs};
+    manualOverridesActive = true;
+    calcOSAGO();
+    if(modal) modal.classList.remove('active');
+};
 });
 
-
+// Функции для калькулятора расторжения
 function applyTerminationDateMask(input) {
     input.addEventListener('input', (e) => {
         let value = e.target.value.replace(/\D/g, '');
@@ -2909,25 +3233,25 @@ function calculateTermination() {
 
     const msPerDay = 24 * 60 * 60 * 1000;
     
-
+    // Общий срок полиса (обычно 365)
     const totalDays = Math.round((dEnd - dStart) / msPerDay);
     
-
+    // Сколько дней прошло до расторжения
     let usedDays = Math.floor((dCancel - dStart) / msPerDay);
     if (usedDays < 0) usedDays = 0;
     if (usedDays > totalDays) usedDays = totalDays;
 
-
+    // Сколько дней осталось
     const remainDays = Math.max(0, totalDays - usedDays);
     
-
+    // Цена одного дня
     const pricePerDay = price / totalDays;
     
-
+    // Суммы
     const usedPrice = pricePerDay * usedDays;
     const remainPrice = pricePerDay * remainDays;
     
-
+    // Расчет возврата: (Остаток суммы) * 0.77
     const tax = remainPrice * 0.23;
     const finalRefund = remainPrice - tax;
 
@@ -2941,9 +3265,31 @@ function calculateTermination() {
     document.getElementById('resTermTax').innerText = `- ${formatCur(tax)} ₽`;
 }
 
+// ТОЛЬКО ДИАГНОСТИКА (без перезаписи обработчика)
+console.log('=== ДИАГНОСТИКА РУЧНОГО РЕЖИМА ===');
+console.log('modal:', document.getElementById('manualModal'));
+console.log('openBtn:', document.getElementById('openManualBtn'));
+console.log('cancelBtn:', document.getElementById('cancelManualBtn'));
+console.log('applyBtn:', document.getElementById('applyManualBtn'));
+console.log('resetManualBtn:', document.getElementById('resetManualBtn'));
     </script>
+<!-- МОДАЛЬНОЕ ОКНО РУЧНОГО РЕЖИМА (ОСАГО) -->
+<div id="manualModal" class="modal-overlay">
+    <div class="manual-modal">
+        <h3>🔧 Ручная правка коэффициентов</h3>
+        <div class="coeff-row"><label>Базовый тариф (БТ)</label><input type="number" id="manualBt" step="1" value="8665"></div>
+        <div class="coeff-row"><label>КТ (регион)</label><input type="number" id="manualKt" step="0.01" value="1.36"></div>
+        <div class="coeff-row"><label>КБМ</label><input type="number" id="manualKbm" step="0.01" value="1.17"></div>
+        <div class="coeff-row"><label>КВС</label><input type="number" id="manualKvs" step="0.01" value="1"></div>
+        <div class="coeff-row"><label>КО (ограничения)</label><input type="number" id="manualKo" step="0.01" value="1"></div>
+        <div class="coeff-row"><label>КМ (мощность)</label><input type="number" id="manualKm" step="0.01" value="1.1"></div>
+        <div class="coeff-row"><label>КС (сезон)</label><input type="number" id="manualKs" step="0.01" value="1"></div>
+        <button class="reset-manual" id="resetManualBtn">⟳ Сбросить на автоматические значения</button>
+        <div class="modal-actions">
+            <button class="btn-cancel" id="cancelManualBtn">Отмена</button>
+            <button class="btn-apply" id="applyManualBtn">Применить</button>
+        </div>
+    </div>
+</div>
 </body>
 </html>
-
-
-
