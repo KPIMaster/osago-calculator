@@ -3443,32 +3443,30 @@ document.addEventListener('DOMContentLoaded', () => {
   toggleOsagoFields(); // Важно! Вызываем при загрузке для установки правильного состояния
   calcOSAGO();
   
-  // Логика работы конвертера кВт <-> л.с.
-const inputKW = document.getElementById('inputKW');
-const inputHP = document.getElementById('inputHP');
-const RATIO = 1.35962;
+// Логика работы конвертера кВт <-> л.с.
+  const inputKW = document.getElementById('inputKW');
+  const inputHP = document.getElementById('inputHP');
+  const RATIO = 1.35962;
 
-if (inputKW && inputHP) {
+  if (inputKW && inputHP) {
     inputKW.addEventListener('input', function() {
-        const val = parseFloat(this.value);
-        if (!isNaN(val)) {
-            inputHP.value = (val * RATIO).toFixed(2);
-        } else {
-            inputHP.value = '';
-        }
+      const val = parseFloat(this.value);
+      if (!isNaN(val)) {
+        inputHP.value = (val * RATIO).toFixed(2);
+      } else {
+        inputHP.value = '';
+      }
     });
 
     inputHP.addEventListener('input', function() {
-        const val = parseFloat(this.value);
-        if (!isNaN(val)) {
-            inputKW.value = (val / RATIO).toFixed(2);
-        } else {
-            inputKW.value = '';
-        }
+      const val = parseFloat(this.value);
+      if (!isNaN(val)) {
+        inputKW.value = (val / RATIO).toFixed(2);
+      } else {
+        inputKW.value = '';
+      }
     });
-}
-});
-
+  }
 // ===== МОДАЛЬНОЕ ОКНО РУЧНОГО РЕЖИМА =====
 const modal = document.getElementById('manualModal');
 const openBtn = document.getElementById('openManualBtn');
@@ -3517,6 +3515,7 @@ if(applyBtn) applyBtn.onclick = () => {
     calcOSAGO();
     if(modal) modal.classList.remove('active');
   };
+});
 
 
   // Функции для калькулятора расторжения
@@ -3583,6 +3582,7 @@ function calculateTermination() {
     document.getElementById('resTermTax').innerText = `- ${formatCur(tax)} ₽`;
 }
     </script>
+    
 <!-- МОДАЛЬНОЕ ОКНО РУЧНОГО РЕЖИМА (ОСАГО) -->
 <div id="manualModal" class="modal-overlay">
     <div class="manual-modal">
