@@ -3160,7 +3160,7 @@ function getKvsValue(age, exp, isMoto) {
 
   // 2. Определяем идеальный индекс столбца (Стаж)
   // 0, 1, 2, 3, 4, 5-6(5), 7-9(6), 10-14(7)
-  let targetCol = exp >= 14 ? 7 : exp >= 10 ? 6 : exp >= 7 ? 5 : exp >= 5 ? 4 : 
+  let targetCol = exp > 14 ? 7 : exp >= 10 ? 6 : exp >= 7 ? 5 : exp >= 5 ? 4 : 
                   exp >= 3 ? 3 : exp >= 2 ? 2 : exp >= 1 ? 1 : 0;
 
   // 3. ПРЕДОХРАНИТЕЛЬ:
